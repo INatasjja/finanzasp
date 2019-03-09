@@ -1,5 +1,8 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.contrib.auth.models import AbstractUser,User
+from django.conf import settings
+
 
 # Create your models here.
 class TipoTransaccion (models.Model):
@@ -75,3 +78,9 @@ class Corte (models.Model):
 
     def __str__(self):
         return str(self.Mes)
+
+
+class Users(AbstractUser):
+    cedula = models.TextField(max_length=11, blank=True)
+    location = models.CharField(max_length=30, blank=True)
+    birth_date = models.DateField(null=True, blank=True)

@@ -3,9 +3,24 @@ from django.contrib.auth.decorators import login_required
 from .models import TipoTransaccion
 from .forms import EditForm,DelForm
 from django.contrib.auth import authenticate, login, logout
+from django.conf import settings
 
 
 # Create your views here.
+def Register(request):
+	data = settings.AUTH_USER_MODEL.objects.get(request.pk)
+	form = RegisterForm(request.POST or None, instance=data)
+	if request.method == "POST":
+		form = RegisterForm(request.POST or None)
+		if form.is_valid():
+			form.save()
+			return HttpResponseRedirect('/list/{}'.format(tipo))
+		else:
+			form = RegisterForm()
+	content = {'title_page':'Editar','form':form,'tipo':tipo,'mensajes':f'Añadir Nuevo','tmensaje':'alert-success'}
+	return render (request, 'finanzas/edit_tipo.html',content)
+
+
 
 def project_list (request):
 	return render (request, 'finanzas/project_list.html')

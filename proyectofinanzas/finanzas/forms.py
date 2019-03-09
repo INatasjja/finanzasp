@@ -16,3 +16,9 @@ class DelForm(forms.ModelForm):
 	class Meta:
 		model = TipoTransaccion
 		fields = ()
+
+
+class RegisterForm(forms.ModelForm):
+	class Meta:
+		model = settings.AUTH_USER_MODEL
+		fields = ('',)
