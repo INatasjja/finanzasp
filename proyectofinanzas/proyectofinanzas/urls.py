@@ -20,5 +20,6 @@ from finanzas.views import login_user
 urlpatterns = [
 path ("", include ('finanzas.urls')),
     path('admin/', admin.site.urls),
-    path('login/',login_user,name='login')
+    path('login/',login_user,name='login'),
+    
 ]
