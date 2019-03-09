@@ -1,0 +1,52 @@
+{% extends 'finanzas/base.html' %}
+{% block content %}
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Tables</h1>
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
+      </div>
+      <button type="button" class="btn btn-info add-new"><i class="fa fa-plus"></i> Add New</button>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <thead>
+              <tr>
+                <th>No.</th>
+                <th>Descripcion</th>
+                <th>Tipo</th>
+                <th>Estado</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+
+{% for data in datos %}
+              <tr>
+                <td>{{ data.id }}</td>
+                <td>{{ data.Descripcion | title }}</td>
+                <td>{{ data.get_Tipo_display  }}</td>
+                <td>{% if data.Activo %}Activo{% else %}Inactivo{% endif %}</td>
+                <td>
+                        <a class="edit" title="Edit" data-toggle="tooltip" href="/edit/{{ data.Tipo }}/{{ data.id }}/"><i class="material-icons">&#xE254;</i></a>
+                        <a class="delete" title="Delete" data-toggle="tooltip" href="/edit/{{ data.Tipo }}/{{ data.id }}/"><i class="material-icons">&#xE872;</i></a>
+                    </td>
+{% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <!-- /.container-fluid -->
+
+</div>
+<!-- End of Main Content -->
+
+
+{% endblock %}

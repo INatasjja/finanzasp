@@ -1,0 +1,19 @@
+{% extends 'finanzas/base.html' %}
+{% block content %}
+<form class="forms-sample" method="POST"> {% csrf_token %}
+
+    <div class="form-group">
+           <label for="exampleInputName1">{{form.Descripcion.label}}</label>
+                           {{ form.Descripcion }}
+    </div>
+    <div class="form-group">
+        <label for="exampleInputName1">{{form.Tipo.label}}</label>
+                        {{ form.Tipo }}
+ </div>
+    <div class="form-group">
+           <label for="exampleInputName1">{{form.Activo.label}}</label>
+                           {{ form.Activo }}
+    </div>
+      <input type="submit" class="btn btn-primary btn-fw" value="Submit" />
+</form>
+{% endblock %}
