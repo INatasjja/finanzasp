@@ -5,23 +5,6 @@ from .forms import *
 from django.contrib.auth import authenticate, login, logout
 from django.conf import settings
 
-
-# Create your views here.
-#def Register(request):
-#	data = settings.AUTH_USER_MODEL.objects.get(request.pk)
-#	form = RegisterForm(request.POST or None, instance=data)
-#	if request.method == "POST":
-#		form = RegisterForm(request.POST or None)
-#		if form.is_valid():
-#			form.save()
-#			return HttpResponseRedirect('/list/{}'.format(tipo))
-#		else:
-#			form = RegisterForm()
-#	content = {'title_page':'Editar','form':form,'tipo':tipo,'mensajes':f'Añadir Nuevo','tmensaje':'alert-success'}
-#	return render (request, 'finanzas/edit_tipo.html',content)
-
-
-
 @login_required
 def profile(request):
     data = Users.objects.get(username = request.user)
@@ -52,6 +35,21 @@ def profileedit(request):
 
 
 @login_required
+def adduser(request):
+    data = Users.objects.get(username = request.user)
+    if request.method == 'POST':
+        form = CreateForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('profile'))
+    else:
+        form = CreateForm()
+
+    context = {'username':request.user,'form':form}
+    return render(request, 'finanzas/edit.html', context)
+
+
+@login_required
 def editPassword(request):
     data = Users.objects.get(username = request.user)
     if request.method == 'POST':
@@ -67,8 +65,208 @@ def editPassword(request):
 
 
 
+@login_required
+def create(request):
+    data = Users.objects.get(username = request.user)
+    if request.method == 'POST':
+        form = EditPasswordForm(request.POST, instance=data)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('profile'))
+    else:
+        form = EditPasswordForm(instance=data)
+
+    context = {'username':request.user,'form':form}
+    return render(request, 'finanzas/edits.html', context)
 
 
+
+@login_required
+def delete(request,tipo,id):
+
+	if tipo == 'e':
+		to_delete = get_object_or_404(Egreso,id=id,Usuario = request.user)
+		form = DelEgresoForm(request.POST or None, instance = to_delete)
+	elif tipo == 'i':
+		to_delete = get_object_or_404(Ingreso,id=id,Usuario = request.user)
+		form = DelIngresoForm(request.POST or None, instance = to_delete)
+	elif tipo == 'r':
+		to_delete = get_object_or_404(RenglonEgreso,id=id,Usuario = request.user)
+		form = DelRenglonEgresoForm(request.POST or None, instance = to_delete)
+	elif tipo == 'p':
+		to_delete = get_object_or_404(TipoPago,id=id,Usuario = request.user)
+		form = DelTipoPagoForm(request.POST or None, instance = to_delete)
+
+
+	if request.method == "POST":
+		if tipo == 'e':
+			to_delete = get_object_or_404(Egreso,id=id,Usuario = request.user)
+			form = DelEgresoForm(request.POST or None, instance = to_delete)
+		elif tipo == 'i':
+			to_delete = get_object_or_404(Ingreso,id=id,Usuario = request.user)
+			form = DelIngresoForm(request.POST or None, instance = to_delete)
+		elif tipo == 'r':
+			to_delete = get_object_or_404(RenglonEgreso,id=id,Usuario = request.user)
+			form = DelRenglonEgresoForm(request.POST or None, instance = to_delete)
+		elif tipo == 'p':
+			to_delete = get_object_or_404(TipoPago,id=id,Usuario = request.user)
+			form = DelTipoPagoForm(request.POST or None, instance = to_delete)
+
+		if form.is_valid():
+			to_delete.delete()
+			return HttpResponseRedirect('/list/{}'.format(tipo))
+		else:
+			if tipo == 'e':
+				form = DelEgresoForm(instance = to_delete)
+			elif tipo == 'i':
+				form = DelIngresoForm(instance = to_delete)
+			elif tipo == 'r':
+				form = DelRenglonEgresoForm(instance = to_delete)
+			elif tipo == 'p':
+				form = DelTipoPagoForm(instance = to_delete)
+
+	content = {'title_page':'Editar','form':form,'tipo':tipo,'mensajes':f'Borrara el registro con id {to_delete.id}, {to_delete.Descripcion}','tmensaje':'alert-danger'}
+	return render (request, 'finanzas/edit_tipo.html',content)
+
+
+@login_required
+def updateE(request,id):
+    data = Egreso.objects.get(Usuario = request.user,id=id)
+    if request.method == 'POST':
+        form = EgresoForm(request.POST, instance=data)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/list/e/')
+    else:
+        form = EgresoForm(instance=data)
+
+    context = {'username':request.user,'form':form}
+    return render(request, 'finanzas/update.html', context)
+
+
+@login_required
+def updateI(request,id):
+    data = Ingreso.objects.get(Usuario = request.user,id=id)
+    if request.method == 'POST':
+        form = IngresoForm(request.POST, instance=data)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/list/i/')
+    else:
+        form = IngresoForm(instance=data)
+
+    context = {'username':request.user,'form':form}
+    return render(request, 'finanzas/update.html', context)
+
+
+@login_required
+def updateR(request,id):
+    data = RenglonEgreso.objects.get(Usuario = request.user,id=id)
+    if request.method == 'POST':
+        form = RenglonEgresoForm(request.POST, instance=data)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/list/r/')
+    else:
+        form = RenglonEgresoForm(instance=data)
+
+    context = {'username':request.user,'form':form}
+    return render(request, 'finanzas/update.html', context)
+
+@login_required
+def updateP(request,id):
+    data = TipoPago.objects.get(Usuario = request.user,id=id)
+    if request.method == 'POST':
+        form = TipoPagoForm(request.POST, instance=data)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/list/ti/')
+    else:
+        form = TipoPagoForm(instance=data)
+
+    context = {'username':request.user,'form':form}
+    return render(request, 'finanzas/update.html', context)
+
+
+
+def list(request,tipo):
+    if tipo == 'p':
+    	data = TipoPago.objects.filter(Usuario=request.user)
+    	template='finanzas/list_ti.html'
+    elif tipo == 'i':
+    	data = Ingreso.objects.filter(Usuario=request.user)
+    	template='finanzas/list_i.html'
+
+    elif tipo == 'e':
+        data = Egreso.objects.filter(Usuario=request.user)
+        template='finanzas/list_e.html'	
+
+    elif tipo == 'r':
+        data = RenglonEgreso.objects.filter(Usuario=request.user)
+        template='finanzas/list_r.html'		
+
+    context = {'username':request,'data':data}
+    return render(request, template, context)
+
+
+
+@login_required
+def createE(request):
+    data = Egreso.objects.get(Usuario = request.user,id=id)
+    if request.method == 'POST':
+        form = EgresoForm(request.POST or None, instance=data)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/list/e/')
+    else:
+        form = EgresoForm()
+
+    context = {'username':request.user,'form':form}
+    return render(request, 'finanzas/update.html', context)
+
+
+@login_required
+def createI(request):
+    data = Ingreso.objects.get(Usuario = request.user,id=id)
+    if request.method == 'POST':
+        form = IngresoForm(request.POST, instance=data)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/list/i/')
+    else:
+        form = IngresoForm()
+
+    context = {'username':request.user,'form':form}
+    return render(request, 'finanzas/update.html', context)
+
+
+@login_required
+def createR(request):
+    data = RenglonEgreso.objects.get(Usuario = request.user,id=id)
+    if request.method == 'POST':
+        form = RenglonEgresoForm(request.POST, instance=data)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/list/r/')
+    else:
+        form = RenglonEgresoForm()
+
+    context = {'username':request.user,'form':form}
+    return render(request, 'finanzas/update.html', context)
+
+@login_required
+def createP(request):
+    data = TipoPago.objects.get(Usuario = request.user,id=id)
+    if request.method == 'POST':
+        form = TipoPagoForm(request.POST, instance=data)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/list/ti/')
+    else:
+        form = TipoPagoForm()
+
+    context = {'username':request.user,'form':form}
+    return render(request, 'finanzas/update.html', context)
 
 
 

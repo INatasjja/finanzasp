@@ -1,4 +1,5 @@
 {% extends 'finanzas\base.html' %}
+{% load crispy_forms_tags %}
 {% block content %}
 <style>
    .emp-profile{
@@ -100,7 +101,7 @@
       <div class="row">
          <div class="col-md-4">
             <div class="profile-img">
-               <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS52y5aInsxSm31CvHOFHWujqUx_wWTS9iM6s7BAm21oEN_RiGoog" alt=""/>
+               <img src="https://banner2.kisspng.com/20180722/gfc/kisspng-user-profile-2018-in-sight-user-conference-expo-5b554c0968c377.0307553315323166814291.jpg" alt=""/>
             </div>
          </div>
          <div class="col-md-6">
@@ -170,7 +171,7 @@
                      <label>Tipo Persona</label>
                   </div>
                   <div class="col-md-6">
-                     <p>{{username.tipoPersona}}</p>
+                     <p>{{username.get_tipoPersona_display}}</p>
                   </div>
                </div>
             </div>
