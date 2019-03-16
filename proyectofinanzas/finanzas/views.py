@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404, render_to_response, redirect, render, reverse,HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
-from .models import TipoTransaccion
-from .forms import EditForm,DelForm
+from .models import *
+from .forms import *
 from django.contrib.auth import authenticate, login, logout
 from django.conf import settings
 
@@ -19,6 +19,74 @@ from django.conf import settings
 #			form = RegisterForm()
 #	content = {'title_page':'Editar','form':form,'tipo':tipo,'mensajes':f'Añadir Nuevo','tmensaje':'alert-success'}
 #	return render (request, 'finanzas/edit_tipo.html',content)
+
+
+
+@login_required
+def profile(request):
+    data = Users.objects.get(username = request.user)
+    if request.method == 'POST':
+        form = EditForm(request.POST, instance=data)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('profile'))
+    else:
+        form = EditForm(instance=data)
+
+    context = {'username':request.user,'form':form}
+    return render(request, 'finanzas\profile.html', context)
+
+@login_required
+def profileedit(request):
+    data = Users.objects.get(username = request.user)
+    if request.method == 'POST':
+        form = EditForm(request.POST, instance=data)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('profile'))
+    else:
+        form = EditForm(instance=data)
+
+    context = {'username':request.user,'form':form}
+    return render(request, 'finanzas/edit.html', context)
+
+
+@login_required
+def editPassword(request):
+    data = Users.objects.get(username = request.user)
+    if request.method == 'POST':
+        form = EditPasswordForm(request.POST, instance=data)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('profile'))
+    else:
+        form = EditPasswordForm(instance=data)
+
+    context = {'username':request.user,'form':form}
+    return render(request, 'finanzas/edit.html', context)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'finanzas'
+    'finanzas',
+    'crispy_forms'
 ]
 
 MIDDLEWARE = [
@@ -120,4 +121,5 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 LOGIN_REDIRECT_URL = 'index'
-#AUTH_USER_MODEL = 'finanzas.Users'
+AUTH_USER_MODEL = 'finanzas.Users'
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
