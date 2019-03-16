@@ -7,18 +7,18 @@ from django.conf import settings
 
 
 # Create your views here.
-def Register(request):
-	data = settings.AUTH_USER_MODEL.objects.get(request.pk)
-	form = RegisterForm(request.POST or None, instance=data)
-	if request.method == "POST":
-		form = RegisterForm(request.POST or None)
-		if form.is_valid():
-			form.save()
-			return HttpResponseRedirect('/list/{}'.format(tipo))
-		else:
-			form = RegisterForm()
-	content = {'title_page':'Editar','form':form,'tipo':tipo,'mensajes':f'Añadir Nuevo','tmensaje':'alert-success'}
-	return render (request, 'finanzas/edit_tipo.html',content)
+#def Register(request):
+#	data = settings.AUTH_USER_MODEL.objects.get(request.pk)
+#	form = RegisterForm(request.POST or None, instance=data)
+#	if request.method == "POST":
+#		form = RegisterForm(request.POST or None)
+#		if form.is_valid():
+#			form.save()
+#			return HttpResponseRedirect('/list/{}'.format(tipo))
+#		else:
+#			form = RegisterForm()
+#	content = {'title_page':'Editar','form':form,'tipo':tipo,'mensajes':f'Añadir Nuevo','tmensaje':'alert-success'}
+#	return render (request, 'finanzas/edit_tipo.html',content)
 
 
 

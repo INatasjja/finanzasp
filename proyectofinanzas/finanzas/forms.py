@@ -18,7 +18,7 @@ class DelForm(forms.ModelForm):
 		fields = ()
 
 
-class RegisterForm(forms.ModelForm):
-	class Meta:
-		model = settings.AUTH_USER_MODEL
-		fields = ('',)
+#class RegisterForm(forms.ModelForm):
+#	class Meta:
+#		model = settings.AUTH_USER_MODEL
+#		fields = ('',)

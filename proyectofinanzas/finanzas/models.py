@@ -80,7 +80,7 @@ class Corte (models.Model):
         return str(self.Mes)
 
 
-class Users(AbstractUser):
-    cedula = models.TextField(max_length=11, blank=True)
-    location = models.CharField(max_length=30, blank=True)
-    birth_date = models.DateField(null=True, blank=True)
+#class Users(AbstractUser):
+ #   cedula = models.TextField(max_length=11, blank=True)
+  #  location = models.CharField(max_length=30, blank=True)
+   # birth_date = models.DateField(null=True, blank=True)
