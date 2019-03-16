@@ -13,7 +13,7 @@ class Users(AbstractUser):
     limite = models.IntegerField(default=0)
 
 
-class Egreso (models.Model):
+class Egreso(models.Model):
     id = models.AutoField (primary_key=True, help_text= 'ID  de Egreso')
     Usuario=models.ForeignKey (Users, on_delete=models.CASCADE, default=1)
     TipoEgreso=models.CharField (max_length=50, help_text='Tipo de egreso')

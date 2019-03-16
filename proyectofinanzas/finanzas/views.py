@@ -83,7 +83,7 @@ def create(request):
 
 
 @login_required
-def update(request):
+def delete(request):
     data = Users.objects.get(username = request.user)
     if request.method == 'POST':
         form = UpdateForm(request.POST, instance=data)
@@ -94,11 +94,30 @@ def update(request):
         form = UpdateForm(instance=data)
 
     context = {'username':request.user,'form':form}
-    return render(request, 'finanzas/edits.html', context)
+    return render(request, 'finanzas/update.html', context)
 
 
 @login_required
-def delete(request):
+def update(request,tipo,id):
+    if tipo == 'p':
+       	data = TipoPago.objects.filter(Usuario=request.user)
+       	form = TipoPagoForm(request.POST, instance=data)
+
+    elif tipo == 'i':
+    	data = Ingreso.objects.filter(Usuario=request.user)
+    	form = IngresoForm(request.POST, instance=data)
+
+    elif tipo == 'e':
+        data = Egreso.objects.filter(Usuario=request.user)
+        form = EgresoForm(request.POST, instance=data)
+
+    elif tipo == 'r':
+        data = RenglonEgreso.objects.filter(Usuario=request.user)
+        form = RenglonEgresoForm(request.POST, instance=data)		
+
+
+
+		
     data = Users.objects.get(username = request.user)
     if request.method == 'POST':
         form = EditPasswordForm(request.POST, instance=data)
@@ -109,7 +128,7 @@ def delete(request):
         form = EditPasswordForm(instance=data)
 
     context = {'username':request.user,'form':form}
-    return render(request, 'finanzas/edits.html', context)
+    return render(request, 'finanzas/update.html', context)
 
 
 def list(request,tipo):

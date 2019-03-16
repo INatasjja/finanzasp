@@ -1,0 +1,25 @@
+{% extends 'finanzas/base.html' %}
+{% block content %}
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Tipos</h1>
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+          {% csrf_token %}
+    {{ form | crispy }}
+    <button type="submit" class="btn btn-primary">Guardar</button>
+
+                    </div>
+                </div>
+            </form>  
+
+  </div>
+  <!-- /.container-fluid -->
+
+</div>
+<!-- End of Main Content -->
+
+
+{% endblock %}

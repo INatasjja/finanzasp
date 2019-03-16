@@ -45,8 +45,30 @@ class EditPasswordForm (ModelForm):
         return user
 
 
-class UpdateForm(ModelForm):
+class TipoPagoForm(ModelForm):
 
 	class Meta:
+		model = TipoPago
+		fields = ['Nombre','EstadoActivo',]
+
+
+class IngresoForm(ModelForm):
+    
+	class Meta:
+		model = Ingreso
+		fields = ['TipoIngreso','Fuente','Descripcion','EstadoActivo',]
+
+
+class EgresoForm(ModelForm):
+    
+	class Meta:
 		model = Egreso
-		fields = ['Descripcion','TipoEgreso','EstadoActivo',]
+		fields = ['TipoEgreso','Descripcion','EstadoActivo',]
+
+
+
+class RenglonEgresoForm(ModelForm):
+    
+	class Meta:
+		model = RenglonEgreso
+		fields = ['Nombre','Descripcion','Institucion','EstadoActivo',]
