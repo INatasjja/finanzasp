@@ -21,7 +21,7 @@ class RenglonEgreso (models.Model):
     id = models.AutoField (primary_key=True, help_text= 'ID Gestion de Ingreso')
     Nombre=models.CharField (max_length=50, help_text='Tipo de ingreso')
     Descripcion= models.CharField (max_length=50, help_text='Descripcion')
-    Institucion=modles.CharField(max_length=35, help_text='Institucion, empleador o cliente')
+    Institucion=models.CharField(max_length=35, help_text='Institucion, empleador o cliente')
     EstadoActivo=models.BooleanField (default=1)
 
     def __str__(self):
