@@ -67,8 +67,69 @@ def editPassword(request):
 
 
 
+@login_required
+def create(request):
+    data = Users.objects.get(username = request.user)
+    if request.method == 'POST':
+        form = EditPasswordForm(request.POST, instance=data)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('profile'))
+    else:
+        form = EditPasswordForm(instance=data)
+
+    context = {'username':request.user,'form':form}
+    return render(request, 'finanzas/edits.html', context)
 
 
+@login_required
+def update(request):
+    data = Users.objects.get(username = request.user)
+    if request.method == 'POST':
+        form = UpdateForm(request.POST, instance=data)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('profile'))
+    else:
+        form = UpdateForm(instance=data)
+
+    context = {'username':request.user,'form':form}
+    return render(request, 'finanzas/edits.html', context)
+
+
+@login_required
+def delete(request):
+    data = Users.objects.get(username = request.user)
+    if request.method == 'POST':
+        form = EditPasswordForm(request.POST, instance=data)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('profile'))
+    else:
+        form = EditPasswordForm(instance=data)
+
+    context = {'username':request.user,'form':form}
+    return render(request, 'finanzas/edits.html', context)
+
+
+def list(request,tipo):
+    if tipo == 'p':
+    	data = TipoPago.objects.filter(Usuario=request.user)
+    	template='finanzas/list_ti.html'
+    elif tipo == 'i':
+    	data = Ingreso.objects.filter(Usuario=request.user)
+    	template='finanzas/list_i.html'
+
+    elif tipo == 'e':
+        data = Egreso.objects.filter(Usuario=request.user)
+        template='finanzas/list_e.html'	
+
+    elif tipo == 'r':
+        data = RenglonEgreso.objects.filter(Usuario=request.user)
+        template='finanzas/list_r.html'		
+
+    context = {'username':request,'data':data}
+    return render(request, template, context)
 
 
 

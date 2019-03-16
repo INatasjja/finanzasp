@@ -1,0 +1,54 @@
+{% extends 'finanzas/base.html' %}
+{% block content %}
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Tipos</h1>
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Tipos de Transacciones</h6>
+      </div>
+      <button type="button" class="btn btn-info add-new" onclick="location.href='/add/{{tipo}}'" type="button"><i class="fa fa-plus"></i> Agregar Nuevo</button>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <thead>
+              <tr>
+                <th>ID Unico</th>
+                <th>Tipo Ingreso</th>
+                <th>Fuente</th>
+                <th>Descripci&oacute;n</th>
+                <th>Estado</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+
+{% for data in data %}
+              <tr>
+                <td>{{ data.id }}</td>
+                <td>{{ data.TipoIngreso | title }}</td>
+                <td>{{ data.Fuente}}</td>
+                <td>{{ data.Descripcion}}</td>
+                <td>{{ data.EstadoActivo}}</td>
+                <td>
+                        <a class="edit" title="Edit" data-toggle="tooltip" href="/edit/{{ data.Tipo }}/{{ data.id }}/"><i class="material-icons">&#xE254;</i></a>
+                        <a class="delete" title="Delete" data-toggle="tooltip" href="/del/{{ data.id }}/"><i class="material-icons">&#xE872;</i></a>
+                    </td>
+{% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <!-- /.container-fluid -->
+
+</div>
+<!-- End of Main Content -->
+
+
+{% endblock %}

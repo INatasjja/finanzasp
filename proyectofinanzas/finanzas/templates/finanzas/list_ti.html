@@ -18,19 +18,17 @@
               <tr>
                 <th>ID Unico</th>
                 <th>Descripci&oacute;n</th>
-                <th>Tipo</th>
                 <th>Estado</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
 
-{% for data in datos %}
+{% for data in data %}
               <tr>
                 <td>{{ data.id }}</td>
-                <td>{{ data.Descripcion | title }}</td>
-                <td>{{ data.get_Tipo_display  }}</td>
-                <td>{% if data.Activo %}Activo{% else %}Inactivo{% endif %}</td>
+                <td>{{ data.Nombre | title }}</td>
+                <td>{{ data.EstadoActivo}}</td>
                 <td>
                         <a class="edit" title="Edit" data-toggle="tooltip" href="/edit/{{ data.Tipo }}/{{ data.id }}/"><i class="material-icons">&#xE254;</i></a>
                         <a class="delete" title="Delete" data-toggle="tooltip" href="/del/{{ data.id }}/"><i class="material-icons">&#xE872;</i></a>

@@ -43,3 +43,10 @@ class EditPasswordForm (ModelForm):
         if commit:
             user.save()
         return user
+
+
+class UpdateForm(ModelForm):
+
+	class Meta:
+		model = Egreso
+		fields = ['Descripcion','TipoEgreso','EstadoActivo',]
