@@ -209,12 +209,10 @@ def list(request,tipo):
     return render(request, template, context)
 
 
-
 @login_required
 def createE(request):
-    data = Egreso.objects.get(Usuario = request.user,id=id)
     if request.method == 'POST':
-        form = EgresoForm(request.POST or None, instance=data)
+        form = EgresoForm(request.POST, instance=data)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect('/list/e/')
@@ -227,7 +225,6 @@ def createE(request):
 
 @login_required
 def createI(request):
-    data = Ingreso.objects.get(Usuario = request.user,id=id)
     if request.method == 'POST':
         form = IngresoForm(request.POST, instance=data)
         if form.is_valid():
@@ -242,30 +239,28 @@ def createI(request):
 
 @login_required
 def createR(request):
-    data = RenglonEgreso.objects.get(Usuario = request.user,id=id)
     if request.method == 'POST':
         form = RenglonEgresoForm(request.POST, instance=data)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect('/list/r/')
     else:
-        form = RenglonEgresoForm()
+        form = RenglonEgresoForm(instance=data)
 
     context = {'username':request.user,'form':form}
     return render(request, 'finanzas/update.html', context)
 
 @login_required
 def createP(request):
-    data = TipoPago.objects.get(Usuario = request.user,id=id)
     if request.method == 'POST':
-        form = TipoPagoForm(request.POST, instance=data)
+        form = TipoPagoForm(request.POST)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect('/list/ti/')
     else:
         form = TipoPagoForm()
 
-    context = {'username':request.user,'form':form}
+    context = {'username': request.user,'form':form}
     return render(request, 'finanzas/update.html', context)
 
 
