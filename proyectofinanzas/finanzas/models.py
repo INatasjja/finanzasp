@@ -38,21 +38,21 @@ class RenglonEgreso (models.Model):
 class TipoPago (models.Model):
     id = models.AutoField (primary_key=True, help_text= 'ID Gestion de Ingreso')
     Usuario=models.ForeignKey (Users, on_delete=models.CASCADE, default=1)
-    Nombre=models.CharField (max_length=50, help_text='Tipo de de pago (Tarjeta, efectivo, etc).')
+    Descripcion=models.CharField (max_length=50, help_text='Tipo de de pago (Tarjeta, efectivo, etc).')
     EstadoActivo=models.BooleanField (default=1)
 
     def __str__(self):
-        return self.Nombre
+        return self.Descripcion
 
 class Fuente (models.Model):
     id = models.AutoField (primary_key=True, help_text= 'ID Gestion de Ingreso')
     Usuario=models.ForeignKey (Users, on_delete=models.CASCADE, default=1)
-    Nombre=models.CharField (max_length=50, help_text='Fuente Ingreso')
+    Descripcion=models.CharField (max_length=50, help_text='Fuente Ingreso')
     Institucion=models.CharField(max_length=35)
     EstadoActivo=models.BooleanField (default=1)
 
     def __str__(self):
-        return self.Nombre
+        return self.Descripcion
 
 class Ingreso (models.Model):
     id = models.AutoField (primary_key=True, help_text= 'ID de Ingreso')

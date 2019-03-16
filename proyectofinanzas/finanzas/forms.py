@@ -4,17 +4,6 @@ from .models import *
 from .validators import valida_cedula
 
 
-#class EditForm(forms.ModelForm):
-#	class Meta:
-#		model = TipoTransaccion
-#		fields = ('Descripcion','Activo','Tipo')
-#
-#		
-#class DelForm(forms.ModelForm):
-#	class Meta:
-#		model = TipoTransaccion
-#		fields = ()
-
 class EditForm (ModelForm):
     cedula = forms.CharField(max_length=13,validators=[valida_cedula] )
     
@@ -26,6 +15,23 @@ class EditForm (ModelForm):
             'password' : forms.PasswordInput(),
         }
 
+class CreateForm (ModelForm):
+    cedula = forms.CharField(max_length=13,validators=[valida_cedula] )
+    
+    class Meta:
+        model = Users
+        fields = ['username','first_name','last_name','password','cedula','email','limite','tipoPersona','is_staff','is_superuser']
+
+        widgets = {
+            'password' : forms.PasswordInput(),
+        }
+
+    def save(self, commit=True):
+        user = super(EditPasswordForm, self).save(commit=False)
+        user.set_password(self.cleaned_data["password"])
+        if commit:
+            user.save()
+        return user
 
 class EditPasswordForm (ModelForm):
         
@@ -49,7 +55,7 @@ class TipoPagoForm(ModelForm):
 
 	class Meta:
 		model = TipoPago
-		fields = ['Nombre','EstadoActivo',]
+		fields = ['Descripcion','EstadoActivo',]
 
 
 class IngresoForm(ModelForm):
@@ -72,3 +78,32 @@ class RenglonEgresoForm(ModelForm):
 	class Meta:
 		model = RenglonEgreso
 		fields = ['Nombre','Descripcion','Institucion','EstadoActivo',]
+
+
+class DelEgresoForm(ModelForm):
+    
+	class Meta:
+		model = Egreso
+		fields = []
+
+
+class DelIngresoForm(ModelForm):
+    
+	class Meta:
+		model =Ingreso
+		fields = [] 
+
+class DelRenglonEgresoForm(ModelForm):
+    
+	class Meta:
+		model = RenglonEgreso
+		fields = []
+
+
+class DelTipoPagoForm(ModelForm):
+    
+	class Meta:
+		model = TipoPago
+		fields = []
+
+

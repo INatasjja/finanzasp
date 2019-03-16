@@ -10,7 +10,7 @@
       <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-primary">Tipos de Transacciones</h6>
       </div>
-      <button type="button" class="btn btn-info add-new" onclick="location.href='/add/{{tipo}}'" type="button"><i class="fa fa-plus"></i> Agregar Nuevo</button>
+      <button type="button" class="btn btn-info add-new" onclick="location.href='/add/e/'" type="button"><i class="fa fa-plus"></i> Agregar Nuevo</button>
       <div class="card-body">
         <div class="table-responsive">
           <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -30,10 +30,11 @@
                 <td>{{ data.id }}</td>
                 <td>{{ data.TipoEgreso | title }}</td>
                 <td>{{ data.Descripcion}}</td>
-                <td>{{ data.EstadoActivo}}</td>
+                <td>{% if data.EstadoActivo %}Activo{% else %}Inactivo{% endif %}</td>
+                
                 <td>
                         <a class="edit" title="Edit" data-toggle="tooltip" href="/edit/e/{{ data.id }}/"><i class="material-icons">&#xE254;</i></a>
-                        <a class="delete" title="Delete" data-toggle="tooltip" href="/del/{{ data.id }}/"><i class="material-icons">&#xE872;</i></a>
+                        <a class="delete" title="Delete" data-toggle="tooltip" href="#" data-toggle="modal" data-target="#deleteModal"><i class="material-icons">&#xE872;</i></a>
                     </td>
 {% endfor %}
             </tbody>
@@ -49,4 +50,22 @@
 <!-- End of Main Content -->
 
 
+ <!-- Delete Modal-->
+  <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">¿En verdad deseas eliminarel registro?</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">Borrara el registro con id {{data.id}}, {{ data.TipoEgreso | title }}'</div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+          <a class="btn btn-danger" href="/delete/e/{{ data.id }}/">Cerrar Sesi&oacute;n</a>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}

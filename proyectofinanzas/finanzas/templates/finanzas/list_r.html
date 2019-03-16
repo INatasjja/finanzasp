@@ -10,7 +10,7 @@
       <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-primary">Tipos de Transacciones</h6>
       </div>
-      <button type="button" class="btn btn-info add-new" onclick="location.href='/add/{{tipo}}'" type="button"><i class="fa fa-plus"></i> Agregar Nuevo</button>
+      <button type="button" class="btn btn-info add-new" onclick="location.href='/add/r'" type="button"><i class="fa fa-plus"></i> Agregar Nuevo</button>
       <div class="card-body">
         <div class="table-responsive">
           <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -32,10 +32,10 @@
                 <td>{{ data.Nombre | title }}</td>
                 <td>{{ data.Descripcion}}</td>
                 <td>{{ data.Institucion}}</td>
-                <td>{{ data.EstadoActivo}}</td>
+                <td>{% if data.EstadoActivo %}Activo{% else %}Inactivo{% endif %}</td>
                 <td>
                         <a class="edit" title="Edit" data-toggle="tooltip" href="/edit/r/{{ data.id }}/"><i class="material-icons">&#xE254;</i></a>
-                        <a class="delete" title="Delete" data-toggle="tooltip" href="/del/{{ data.id }}/"><i class="material-icons">&#xE872;</i></a>
+                        <a class="delete" title="Delete" data-toggle="tooltip" href="/delete/r/{{ data.id }}/"><i class="material-icons">&#xE872;</i></a>
                     </td>
 {% endfor %}
             </tbody>
