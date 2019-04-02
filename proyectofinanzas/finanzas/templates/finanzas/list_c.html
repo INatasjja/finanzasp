@@ -13,7 +13,7 @@
       <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-primary">Cortes</h6>
       </div>
-      <button type="button" class="btn btn-info add-new" onclick="location.href='/add/e/'" type="button"><i class="fa fa-plus"></i> Generar</button>
+      <button type="button" class="btn btn-info add-new" onclick="location.href='/cortes/genera/'" type="button"><i class="fa fa-plus"></i> Generar</button>
       <div class="card-body">
         <div class="table-responsive">
           <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -42,7 +42,6 @@
                 <td>{{ data.BalanceCorte }}</td>
                 <td>
                 <a class="edit" title="Detalles" data-toggle="tooltip" href="/cortes/{{ data.id }}/"><i class="material-icons">dvr</i></a>
-                        <a class="edit" title="Edit" data-toggle="tooltip" href="/edit/e/{{ data.id }}/"><i class="material-icons">&#xE254;</i></a>
                         <a class="delete" title="Delete" data-toggle="tooltip" href="#" data-toggle="modal" data-target="#deleteModal"><i class="material-icons">&#xE872;</i></a>
                     </td>
 {% endfor %}

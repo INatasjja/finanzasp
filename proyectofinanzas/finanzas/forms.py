@@ -80,6 +80,13 @@ class RenglonEgresoForm(ModelForm):
 		fields = ['Nombre','Descripcion','Institucion','EstadoActivo',]
 
 
+class GeneraCorteForm(ModelForm):
+    
+	class Meta:
+		model = Corte
+		fields = ['Ano','Mes','Comentario',]
+
+
 class DelEgresoForm(ModelForm):
     
 	class Meta:
