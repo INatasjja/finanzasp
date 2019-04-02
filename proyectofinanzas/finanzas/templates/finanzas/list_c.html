@@ -1,0 +1,66 @@
+{% extends 'finanzas/base.html' %}
+{% block content %}
+
+
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Mis Cortes</h1>
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Cortes</h6>
+      </div>
+      <button type="button" class="btn btn-info add-new" onclick="location.href='/cortes/genera/'" type="button"><i class="fa fa-plus"></i> Generar</button>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <thead>
+              <tr>
+                <th>Año</th>
+                <th>Mes</th>
+                <th>Fecha de Corte</th>
+                <th>Balance Inicial</th>
+                <th>Ingreos</th>
+                <th>Egresos</th>
+                <th>Balance Corte</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+
+{% for data in data %}
+              <tr>
+                <td>{{ data.Ano }}</td>
+                <td>{{ data.Mes | title }}</td>
+                <td>{{ data.FechaCorte}}</td>
+                <td>{{ data.BalanceInicial}}</td>
+                <td>{{ data.TotalIngresos }}</td>
+                <td>{{ data.TotalEgresos }}</td>
+                <td>{{ data.BalanceCorte }}</td>
+                <td>
+                <a class="edit" title="Detalles" data-toggle="tooltip" href="/cortes/{{ data.id }}/"><i class="material-icons">dvr</i></a>
+                        <a class="delete" title="Delete" data-toggle="tooltip" href="#" data-toggle="modal" data-target="#deleteModal"><i class="material-icons">&#xE872;</i></a>
+                    </td>
+{% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <!-- /.container-fluid -->
+
+</div>
+<!-- End of Main Content -->
+
+
+
+
+
+
+
+{% endblock %}

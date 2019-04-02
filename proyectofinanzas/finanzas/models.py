@@ -2,6 +2,8 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import AbstractUser,User
 from django.conf import settings
+import datetime
+
 
 
 # Create your models here.
@@ -82,7 +84,7 @@ class Transacciones (models.Model):
     id = models.AutoField (primary_key=True, help_text= 'ID Transaccion')
     Usuario=models.ForeignKey (Users, on_delete=models.CASCADE, default=1)
     TipoTransaccion=models.CharField(max_length=1, choices=(('I', 'Ingreso'), ('E', 'Egreso')),default='')
-    FechaTransaccion=models.DateField
+    FechaTransaccion=models.DateField(default=datetime.date.today)
     FechaRegistro=models.DateField (auto_now=True)
     Monto=models.CharField (max_length=12, help_text='Monto Transaccion')
     Descripcion= models.CharField (max_length=50, help_text='Descripcion')
@@ -111,3 +113,13 @@ class Corte (models.Model):
         return self.Mes
 
     
+class TransaccionesCorte (models.Model):
+    id = models.AutoField (primary_key=True, help_text= 'ID Transaccion')
+    Usuario=models.ForeignKey (Users, on_delete=models.CASCADE, default=1)
+    Transaccion = models.ForeignKey(Transacciones, on_delete=models.CASCADE, default=1)
+    Activo=models.BooleanField (default=1)
+    corte = models.ForeignKey (Corte,on_delete=models.CASCADE, default=0)
+    fecha = models.DateField (default=datetime.date.today)
+
+    def __str__(self):
+        return self.Transaccion.Descripcion

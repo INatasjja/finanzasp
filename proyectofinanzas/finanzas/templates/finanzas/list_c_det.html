@@ -1,0 +1,55 @@
+{% extends 'finanzas/base.html' %}
+{% block content %}
+
+
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Detalle del Corte</h1>
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Cortes</h6>
+      </div>
+      <button type="button" class="btn btn-info add-new" onclick="location.href='/add/e/'" type="button"><i class="fa fa-plus"></i> Generar</button>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <thead>
+              <tr>
+                <th>Tipo</th>
+                <th>Concepto</th>
+                <th>Monto</th>
+                <th>Fecha Transaccion</th>
+              </tr>
+            </thead>
+            <tbody>
+
+{% for data in data %}
+              <tr>
+                <td>{{ data.Transaccion.TipoTransaccion }}</td>
+                <td>{{ data.Transaccion.Descripcion }}</td>
+                <td>{{ data.Transaccion.Monto }}</td>
+                <td>{{ data.Transaccion.FechaTransaccion }}</td>
+{% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <!-- /.container-fluid -->
+
+</div>
+<!-- End of Main Content -->
+
+
+
+
+
+
+
+{% endblock %}

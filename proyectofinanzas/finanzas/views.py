@@ -4,6 +4,8 @@ from .models import *
 from .forms import *
 from django.contrib.auth import authenticate, login, logout
 from django.conf import settings
+from datetime import datetime
+
 
 @login_required
 def profile(request):
@@ -209,12 +211,89 @@ def list(request,tipo):
     return render(request, template, context)
 
 
+def listCorte(request):
+    data = Corte.objects.filter(Usuario=request.user)
+    template='finanzas/list_c.html'		
+    context = {'username':request,'data':data}
+    return render(request, template, context)
+
+
+Meses = {'Ene':1,
+         'Feb':2,
+         'Mar':3,
+         'Abr':4,
+         'May':5,
+         'Jun':6,
+         'Jul':7,
+         'Ago':8,
+         'Sep':9,
+         'Oct':10,
+         'Nov':11,
+         'Dec':12,}
+
+
+
+def GenerarCorte (user,Ano,Mes):
+    tingreso = 0
+    tegreso = 0
+    transacciones = []
+    ingresos = Transacciones.objects.filter(Usuario=str(user),TipoTransaccion='I',EstadoActivo=1)
+    egresos = Transacciones.objects.filter(Usuario=str(user),TipoTransaccion='E',EstadoActivo=1)
+    for i in ingresos:
+        if i.FechaTransaccion.month == Meses.get(Mes) and i.FechaTransaccion.year == int(Ano):
+            tingreso = tingreso + int(i.Monto)
+            transacciones.append(i.id)
+    for e in egresos:
+        if e.FechaTransaccion.month == Meses.get(Mes) and e.FechaTransaccion.year == int(Ano):
+            tegreso = tegreso + int(e.Monto)
+            transacciones.append(e.id)
+
+    data = {'TotalIngresos':tingreso,'TotalEgresos':tegreso,'BalanceCorte':tingreso - tegreso,'transacciones':transacciones}
+    return data
+
+
+
+def GeneraCorte(request):
+    BalanceInicial = Users.objects.get(username = request.user).limite
+    if request.method == 'POST':
+        form = GeneraCorteForm(request.POST)
+        if form.is_valid():
+            DatoCorte = GenerarCorte(request.user.id,request.POST['Ano'],request.POST['Mes'])
+            #form.save()
+            Corte.objects.create(Usuario=request.user,
+                                 Ano=request.POST['Ano'],
+                                 Mes=request.POST['Mes'],
+                                 FechaCorte = datetime.today(),
+                                 BalanceInicial = BalanceInicial,
+                                 TotalIngresos = DatoCorte['TotalIngresos'],
+                                 TotalEgresos = DatoCorte['TotalEgresos'],
+                                 BalanceCorte = DatoCorte['BalanceCorte'],
+                                 Comentario=request.POST['Comentario'])
+            for x in DatoCorte['transacciones']:
+                TransaccionesCorte.objects.create(Usuario = request.user,
+                                                  Transaccion = Transacciones.objects.get(id=x),
+                                                  corte = Corte.objects.latest('FechaCorte'),
+                                                  fecha = datetime.today())
+            return HttpResponseRedirect('/miscortes/')
+    else:
+        form = GeneraCorteForm()
+
+    context = {'username':request.user,'form':form}
+    return render(request, 'finanzas/list_c_Gen.html', context)
+
+
+def listCorteDet(request,id):
+    data = TransaccionesCorte.objects.filter(Usuario=request.user,id=id)
+    template='finanzas/list_c_det.html'		
+
+    context = {'username':request,'data':data}
+    return render(request, template, context)
+
 
 @login_required
 def createE(request):
-    data = Egreso.objects.get(Usuario = request.user,id=id)
     if request.method == 'POST':
-        form = EgresoForm(request.POST or None, instance=data)
+        form = EgresoForm(request.POST, instance=data)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect('/list/e/')
@@ -227,7 +306,6 @@ def createE(request):
 
 @login_required
 def createI(request):
-    data = Ingreso.objects.get(Usuario = request.user,id=id)
     if request.method == 'POST':
         form = IngresoForm(request.POST, instance=data)
         if form.is_valid():
@@ -242,30 +320,28 @@ def createI(request):
 
 @login_required
 def createR(request):
-    data = RenglonEgreso.objects.get(Usuario = request.user,id=id)
     if request.method == 'POST':
         form = RenglonEgresoForm(request.POST, instance=data)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect('/list/r/')
     else:
-        form = RenglonEgresoForm()
+        form = RenglonEgresoForm(instance=data)
 
     context = {'username':request.user,'form':form}
     return render(request, 'finanzas/update.html', context)
 
 @login_required
 def createP(request):
-    data = TipoPago.objects.get(Usuario = request.user,id=id)
     if request.method == 'POST':
-        form = TipoPagoForm(request.POST, instance=data)
+        form = TipoPagoForm(request.POST)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect('/list/ti/')
     else:
         form = TipoPagoForm()
 
-    context = {'username':request.user,'form':form}
+    context = {'username': request.user,'form':form}
     return render(request, 'finanzas/update.html', context)
 
 
