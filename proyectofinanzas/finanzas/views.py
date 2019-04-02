@@ -209,6 +209,21 @@ def list(request,tipo):
     return render(request, template, context)
 
 
+def listCorte(request):
+    data = Corte.objects.filter(Usuario=request.user)
+    template='finanzas/list_c.html'		
+
+    context = {'username':request,'data':data}
+    return render(request, template, context)
+
+def listCorteDet(request,id):
+    data = Corte.objects.filter(Usuario=request.user)
+    template='finanzas/list_c.html'		
+
+    context = {'username':request,'data':data}
+    return render(request, template, context)
+
+
 @login_required
 def createE(request):
     if request.method == 'POST':
