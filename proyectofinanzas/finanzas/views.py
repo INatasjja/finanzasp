@@ -12,8 +12,7 @@ from reportlab.pdfgen import canvas
 from easy_pdf.views import PDFTemplateView
 from django.views.generic import View
 from django.utils import timezone
-
-
+import csv
 
 
 @login_required
@@ -549,33 +548,17 @@ def EditTransaccione(request,id):
     context = {'username':request.user,'form':form}
     return render(request, 'finanzas/add_transacciones.html', context)
 
-
-
-@login_required
-def GenerarPDF(request,tipo,id):
-    general = Corte.objects.get(Usuario=request.user,id=id)
-
-    # Create a file-like buffer to receive PDF data.
-    buffer = io.BytesIO()
-
-    # Create the PDF object, using the buffer as its "file."
-    p = canvas.Canvas(buffer)
-
-    # Draw things on the PDF. Here's where the PDF generation happens.
-    # See the ReportLab documentation for the full list of functionality.
-    p.drawString(100, 100, f"Hello world.\n{Corte.Comentario}")
-
-    # Close the PDF object cleanly, and we're done.
-    p.showPage()
-    p.save()
-
-    # FileResponse sets the Content-Disposition header so that browsers
-    # present the option to save the file.
-    return FileResponse(buffer, as_attachment=True, filename=f'hello.pdf')
-
-
-    class HelloPDFView(PDFTemplateView):
-        template_name = 'hello.html'
+def Pdfp(request,id):
+    today = timezone.now()
+    general = Corte.objects.get(Usuario=request.user,id=id,EstadoActivo=1)
+    data = TransaccionesCorte.objects.filter(Usuario=request.user,corte=id,Activo=1)
+    context = {
+            'today': today,
+            'general': general,
+            'data': data,
+            'request': request
+        }
+    return render(request, 'html.html', context)
 
 
 class Pdf(View):
@@ -592,14 +575,13 @@ class Pdf(View):
         return Render.render('pdf.html', params)
 
 
-def Pdfp(request,id):
-    today = timezone.now()
+def Csv(request,id):
     general = Corte.objects.get(Usuario=request.user,id=id)
     data = TransaccionesCorte.objects.filter(Usuario=request.user,corte=id)
-    context = {
-            'today': today,
-            'general': general,
-            'data': data,
-            'request': request
-        }
-    return render(request, 'pdf.html', context)
+    
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="corte.csv"'
+    writer = csv.writer(response)
+    writer.writerow(['usuario','corte','tipo', 'Concepto', 'Monto', 'FechaRegistro','FechaTransaccion'])
+    for x in data: writer.writerow([request.user.username,x.corte, x.Transaccion.TipoTransaccion, x.Transaccion.Descripcion, x.Transaccion.Monto, x.Transaccion.FechaRegistro,x.Transaccion.FechaTransaccion])
+    return response

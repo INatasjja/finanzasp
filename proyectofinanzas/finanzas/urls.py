@@ -23,14 +23,13 @@ urlpatterns = [
     path('profile/edit/', views.profileedit, name='editprofile'),
     path('profile/add/user', views.adduser, name='crearusuario'),
     path('profile/edit/password', views.editPassword, name='editprofilePassword'),
-
     path('registro/ingreso/', views.RegistroIngreso, name='RegistroIngreso'),
     path('registro/gastos/', views.RegistroGasto, name='RegistroGasto'),
     path('transacciones/', views.Transaccione, name='Transacciones'),
     path('gastos/', views.RegistroGasto, name='Gastos'),
     path('add/transacciones', views.AddTransaccione, name='AddTransaccione'),
     path('edit/transacciones/<int:id>/', views.EditTransaccione, name='EditTransaccione'),
-    path('generar/<str:tipo>/<int:id>/', views.GenerarPDF, name='GenerarPDF'),
-    path('render/c/<int:id>/', views.Pdf.as_view()),
-    path('renderp/c/<int:id>/', views.Pdfp, name='GenerarPDF'), 
+    path('renderh/c/<int:id>/', views.Pdfp, name='GenerarHTML'),
+    path('renderc/c/<int:id>/', views.Csv, name='GenerarPDF'),
+    path('render/c/<int:id>/', views.Pdf.as_view()), 
 ]
