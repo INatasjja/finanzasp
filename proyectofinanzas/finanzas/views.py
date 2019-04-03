@@ -13,7 +13,9 @@ from easy_pdf.views import PDFTemplateView
 from django.views.generic import View
 from django.utils import timezone
 import csv
-from watson import search as watson
+from django.db.models import Q
+from itertools import chain
+
 
 
 @login_required
@@ -587,14 +589,16 @@ def Csv(request,id):
     for x in data: writer.writerow([request.user.username,x.corte.id, x.Transaccion.TipoTransaccion, x.Transaccion.Descripcion, x.Transaccion.Monto, x.Transaccion.FechaRegistro,x.Transaccion.FechaTransaccion])
     return response
 
-
 def Busqueda(request):
-    search_results = watson.search("Your search text")
-    found_entries = None
-    if ('q' in request.GET) and request.GET['q'].strip():
-        query_string = request.GET['q']
-        entry_query = utils.get_query(query_string, ['title', 'body',])
-        posts = Post.objects.filter(entry_query).order_by('created')
-        return render(request, 'search.html', { 'query_string': query_string, 'posts': posts })
-    else:
-        return render(request, 'search.html', { 'query_string': 'Null', 'found_entries': 'Enter a search term' })
+    template = 'finanzas/busqueda.html'
+    query = request.GET.get('q')
+    results = chain(
+            Ingreso.objects.filter(Q(Descripcion__icontains=query) | Q(TipoIngreso__icontains=query)), 
+            Egreso.objects.filter(Q(Descripcion__icontains=query) | Q(TipoEgreso__icontains=query)),
+            Users.objects.filter(Q(username__icontains=query) | Q(cedula__icontains=query)),
+            )
+            
+    
+    print(results)
+    context = {'items':results}
+    return render(request, template, context)

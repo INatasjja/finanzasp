@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'finanzas',
     'crispy_forms',
     'easy_pdf',
-    'watson'
+    'simple_search'
 ]
 
 MIDDLEWARE = [

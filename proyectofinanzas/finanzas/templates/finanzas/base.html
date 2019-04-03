@@ -135,8 +135,8 @@
             </li>
 
             <!-- Nav Item - User Information -->
-    <form type="get" action="." class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="search" placeholder="Busqueda" name="search">
+    <form method="GET" action="{% url 'Resultados' %}" class="form-inline my-2 my-lg-0">
+      <input value="{{request.GET.q}}" class="form-control mr-sm-2" type="search" placeholder="Busqueda" name="q">
       <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
     </form>
             <li class="nav-item dropdown no-arrow">

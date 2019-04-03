@@ -1,0 +1,50 @@
+{% extends 'finanzas/base.html' %}
+{% block content %}
+
+
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Detalles del Corte</h1>
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+      <div class="card-body">
+            <div class="col-md-8">
+         <div class="tab-content profile-tab" id="myTabContent">
+        <div class="table-responsive">
+          <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <thead>
+              <tr>
+                <th>Resultado</th>
+                <th>Accion</th>
+              </tr>
+            </thead>
+            <tbody>
+
+{% for data in items %}
+              <tr>
+                <td>{{data.Descripcion}}</td>
+                <td>
+                <a class="edit" title="Detalles" data-toggle="tooltip" href="/cortes/{{ data.id }}/"><i class="material-icons">dvr</i></a>                    </td>
+{% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <!-- /.container-fluid -->
+
+</div>
+<!-- End of Main Content -->
+
+
+
+
+
+
+
+{% endblock %}
