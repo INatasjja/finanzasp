@@ -244,7 +244,7 @@ def list(request,tipo):
 
 
 def listCorte(request):
-    data = Corte.objects.filter(Usuario=request.user).order_by('-id')
+    data = Corte.objects.filter(Usuario=request.user, EstadoActivo=1).order_by('-id')
     template='finanzas/list_c.html'		
     context = {'username':request,'data':data}
     return render(request, template, context)
@@ -578,7 +578,7 @@ class Pdf(View):
 def Csv(request,id):
     general = Corte.objects.get(Usuario=request.user,id=id)
     data = TransaccionesCorte.objects.filter(Usuario=request.user,corte=id)
-    
+
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="corte.csv"'
     writer = csv.writer(response)
