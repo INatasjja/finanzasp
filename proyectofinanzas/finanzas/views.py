@@ -13,6 +13,7 @@ from easy_pdf.views import PDFTemplateView
 from django.views.generic import View
 from django.utils import timezone
 import csv
+from watson import search as watson
 
 
 @login_required
@@ -583,5 +584,17 @@ def Csv(request,id):
     response['Content-Disposition'] = 'attachment; filename="corte.csv"'
     writer = csv.writer(response)
     writer.writerow(['usuario','corte','tipo', 'Concepto', 'Monto', 'FechaRegistro','FechaTransaccion'])
-    for x in data: writer.writerow([request.user.username,x.corte, x.Transaccion.TipoTransaccion, x.Transaccion.Descripcion, x.Transaccion.Monto, x.Transaccion.FechaRegistro,x.Transaccion.FechaTransaccion])
+    for x in data: writer.writerow([request.user.username,x.corte.id, x.Transaccion.TipoTransaccion, x.Transaccion.Descripcion, x.Transaccion.Monto, x.Transaccion.FechaRegistro,x.Transaccion.FechaTransaccion])
     return response
+
+
+def Busqueda(request):
+    search_results = watson.search("Your search text")
+    found_entries = None
+    if ('q' in request.GET) and request.GET['q'].strip():
+        query_string = request.GET['q']
+        entry_query = utils.get_query(query_string, ['title', 'body',])
+        posts = Post.objects.filter(entry_query).order_by('created')
+        return render(request, 'search.html', { 'query_string': query_string, 'posts': posts })
+    else:
+        return render(request, 'search.html', { 'query_string': 'Null', 'found_entries': 'Enter a search term' })

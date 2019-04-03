@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'finanzas',
     'crispy_forms',
-    'easy_pdf'
+    'easy_pdf',
+    'watson'
 ]
 
 MIDDLEWARE = [
