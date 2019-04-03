@@ -51,7 +51,7 @@
       <!-- Nav Item - Dashboard -->
       <li class="nav-item">
         <a class="nav-link" href="{% url 'listCorte' %}">
-          <i class="fas fa-fw fa-tachometer-alt"></i>
+          <i class="fas fa-fw fa-user-astronaut"></i>
           <span>Mi Corte</span></a>
       </li>
 
@@ -59,11 +59,19 @@
       <!-- Divider -->
       <hr class="sidebar-divider">
 
-      <!-- Heading -->
-      <div class="sidebar-heading">
-        Configuraci&oacute;n
-      </div>
-
+      <!-- Nav Item - Pages Collapse Menu -->
+      <li class="nav-item">
+        <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapsePagesRegistro" aria-expanded="true" aria-controls="collapsePages">
+          <i class="fas fa-fw fa-folder"></i>
+          <span>Registro</span>
+        </a>
+        <div id="collapsePagesRegistro" class="collapse show" aria-labelledby="headingPages">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <a class="collapse-item" href="{% url 'Transacciones' %}">Transacciones</a>
+        </div>
+      </li>
+      <!-- Divider -->
+      <hr class="sidebar-divider d-none d-md-block">
       <!-- Nav Item - Pages Collapse Menu -->
       <li class="nav-item">
         <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
@@ -81,7 +89,6 @@
       </li>
       <!-- Divider -->
       <hr class="sidebar-divider d-none d-md-block">
-
       <!-- Sidebar Toggler (Sidebar) -->
       <div class="text-center d-none d-md-inline">
         <button class="rounded-circle border-0" id="sidebarToggle"></button>

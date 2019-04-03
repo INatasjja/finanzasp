@@ -42,7 +42,7 @@
                 <td>{{ data.BalanceCorte }}</td>
                 <td>
                 <a class="edit" title="Detalles" data-toggle="tooltip" href="/cortes/{{ data.id }}/"><i class="material-icons">dvr</i></a>
-                        <a class="delete" title="Delete" data-toggle="tooltip" href="#" data-toggle="modal" data-target="#deleteModal"><i class="material-icons">&#xE872;</i></a>
+                        <a class="delete" title="Delete" data-toggle="tooltip" href="/delete/c/{{ data.id }}/" data-toggle="modal" data-target="#deleteModal"><i class="material-icons">&#xE872;</i></a>
                     </td>
 {% endfor %}
             </tbody>

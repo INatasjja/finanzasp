@@ -7,14 +7,76 @@
 <div class="container-fluid">
 
     <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Detalle del Corte</h1>
+    <h1 class="h3 mb-2 text-gray-800">Detalles del Corte</h1>
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
       <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Cortes</h6>
+        <div><a href="/generar/c/{{general.id}}/" class="btn btn-info" role="button">Generar PDF</a></div>
       </div>
-      <button type="button" class="btn btn-info add-new" onclick="location.href='/add/e/'" type="button"><i class="fa fa-plus"></i> Generar</button>
       <div class="card-body">
+            <div class="col-md-8">
+         <div class="tab-content profile-tab" id="myTabContent">
+            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+               <div class="row">
+                  <div class="col-md-6">
+                     <label>Periodo</label>
+                  </div>
+                  <div class="col-md-6">
+                     <p>{{general.Ano}}{{general.Mes}}</p>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-md-6">
+                     <label>Fecha Corte</label>
+                  </div>
+                  <div class="col-md-6">
+                     <p>{{general.FechaCorte}}</p>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-md-6">
+                     <label>Limite</label>
+                  </div>
+                  <div class="col-md-6">
+                     <p>{{general.BalanceInicial}}</p>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-md-6">
+                     <label>Total Ingresos</label>
+                  </div>
+                  <div class="col-md-6">
+                     <p>{{general.TotalIngresos}}</p>
+                  </div>
+               </div>
+<div class="row">
+                  <div class="col-md-6">
+                     <label>Total Gastos</label>
+                  </div>
+                  <div class="col-md-6">
+                     <p>{{general.TotalEgresos}}</p>
+                  </div>
+               </div>
+<div class="row">
+                  <div class="col-md-6">
+                     <label>Balance Final</label>
+                  </div>
+                  <div class="col-md-6">
+                     <p>{{general.BalanceCorte}}</p>
+                  </div>
+               </div>
+<div class="row">
+                  <div class="col-md-6">
+                     <label>Comentario</label>
+                  </div>
+                  <div class="col-md-6">
+                     <p>{{general.Comentario}}</p>
+                  </div>
+               </div>
+
+            </div>
+         </div>
+      </div>
         <div class="table-responsive">
           <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
             <thead>

@@ -5,6 +5,11 @@ from .forms import *
 from django.contrib.auth import authenticate, login, logout
 from django.conf import settings
 from datetime import datetime
+import io
+from django.http import FileResponse
+from reportlab.pdfgen import canvas
+from easy_pdf.views import PDFTemplateView
+
 
 
 @login_required
@@ -98,25 +103,44 @@ def delete(request,tipo,id):
 	elif tipo == 'p':
 		to_delete = get_object_or_404(TipoPago,id=id,Usuario = request.user)
 		form = DelTipoPagoForm(request.POST or None, instance = to_delete)
+	elif tipo == 't':
+		to_delete = get_object_or_404(Transacciones,id=id,Usuario = request.user)
+		form = DelTransaccionesForm(request.POST or None, instance = to_delete)
+	elif tipo == 'c':
+		to_delete = get_object_or_404(Corte,id=id,Usuario = request.user)
+		form = DelCorteForm(request.POST or None, instance = to_delete)  
 
 
 	if request.method == "POST":
 		if tipo == 'e':
 			to_delete = get_object_or_404(Egreso,id=id,Usuario = request.user)
 			form = DelEgresoForm(request.POST or None, instance = to_delete)
+			redirect = '/list/{}'.format(tipo)
 		elif tipo == 'i':
 			to_delete = get_object_or_404(Ingreso,id=id,Usuario = request.user)
 			form = DelIngresoForm(request.POST or None, instance = to_delete)
+			redirect = '/list/{}'.format(tipo)
 		elif tipo == 'r':
 			to_delete = get_object_or_404(RenglonEgreso,id=id,Usuario = request.user)
 			form = DelRenglonEgresoForm(request.POST or None, instance = to_delete)
+			redirect = '/list/{}'.format(tipo)
 		elif tipo == 'p':
 			to_delete = get_object_or_404(TipoPago,id=id,Usuario = request.user)
 			form = DelTipoPagoForm(request.POST or None, instance = to_delete)
+			redirect = '/list/{}'.format(tipo)
+		elif tipo == 't':
+			to_delete = get_object_or_404(Transacciones,id=id,Usuario = request.user)
+			form = DelTransaccionesForm(request.POST or None, instance = to_delete)
+			redirect = '/transacciones/'
+		elif tipo == 'c':
+			to_delete = get_object_or_404(Corte,id=id,Usuario = request.user)
+			form = DelCorteForm(request.POST or None, instance = to_delete)
+			redirect = '/miscortes/'
 
 		if form.is_valid():
-			to_delete.delete()
-			return HttpResponseRedirect('/list/{}'.format(tipo))
+			to_delete.EstadoActivo=0
+			to_delete.save()
+			return HttpResponseRedirect(redirect)
 		else:
 			if tipo == 'e':
 				form = DelEgresoForm(instance = to_delete)
@@ -126,8 +150,13 @@ def delete(request,tipo,id):
 				form = DelRenglonEgresoForm(instance = to_delete)
 			elif tipo == 'p':
 				form = DelTipoPagoForm(instance = to_delete)
+			elif tipo == 't':
+    				form = DelTransaccionesForm(instance = to_delete)
+			elif tipo == 'c':
+    				form = DelCorteForm(instance = to_delete)
 
-	content = {'title_page':'Editar','form':form,'tipo':tipo,'mensajes':f'Borrara el registro con id {to_delete.id}, {to_delete.Descripcion}','tmensaje':'alert-danger'}
+
+	content = {'title_page':'Editar','form':form,'tipo':tipo,'mensajes':f'Borrara el registro con id {to_delete.id}','tmensaje':'alert-danger'}
 	return render (request, 'finanzas/edit_tipo.html',content)
 
 
@@ -274,6 +303,7 @@ def GeneraCorte(request):
                                                   Transaccion = Transacciones.objects.get(id=x),
                                                   corte = Corte.objects.latest('FechaCorte'),
                                                   fecha = datetime.today())
+            print(DatoCorte['transacciones'])
             return HttpResponseRedirect('/miscortes/')
     else:
         form = GeneraCorteForm()
@@ -283,10 +313,12 @@ def GeneraCorte(request):
 
 
 def listCorteDet(request,id):
+    general = Corte.objects.get(Usuario=request.user,id=id)
     data = TransaccionesCorte.objects.filter(Usuario=request.user,id=id)
+    print(data)
     template='finanzas/list_c_det.html'		
 
-    context = {'username':request,'data':data}
+    context = {'username':request,'data':data,'general':general}
     return render(request, template, context)
 
 
@@ -451,3 +483,91 @@ def login_user(request):
 def user_logout(request):
 	logout(request)
 	return HttpResponseRedirect(reverse('login'))
+
+@login_required
+def RegistroIngreso(request):
+    if request.method == 'POST':
+        form = GeneraCorteForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/miscortes/')
+    else:
+        form = GeneraCorteForm()
+
+    context = {'username':request.user,'form':form}
+    return render(request, 'finanzas/list_c_Gen.html', context)
+
+@login_required
+def RegistroGasto(request):
+    if request.method == 'POST':
+        form = GeneraCorteForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/miscortes/')
+    else:
+        form = GeneraCorteForm()
+
+    context = {'username':request.user,'form':form}
+    return render(request, 'finanzas/list_c_Gen.html', context)
+
+
+@login_required
+def Transaccione(request):
+    data = Transacciones.objects.filter(Usuario=request.user,EstadoActivo=1)
+    template = 'finanzas/list_transacciones.html'
+
+    context = {'username':request.user,'data': data}
+    return render(request, template, context)
+
+@login_required
+def AddTransaccione(request):
+    if request.method == 'POST':
+        form = TransaccionesForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/transacciones/')
+    else:
+        form = TransaccionesForm()
+
+    context = {'username':request.user,'form':form}
+    return render(request, 'finanzas/add_transacciones.html', context)
+    
+@login_required
+def EditTransaccione(request,id):
+    data = Transacciones.objects.get(Usuario=request.user,id=id)
+    if request.method == 'POST':
+        form = TransaccionesForm(request.POST or None, instance = data)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/transacciones/')
+    else:
+        form = TransaccionesForm(instance = data)
+
+    context = {'username':request.user,'form':form}
+    return render(request, 'finanzas/add_transacciones.html', context)
+
+@login_required
+def GenerarPDF(request,tipo,id):
+    general = Corte.objects.get(Usuario=request.user,id=id)
+
+    # Create a file-like buffer to receive PDF data.
+    buffer = io.BytesIO()
+
+    # Create the PDF object, using the buffer as its "file."
+    p = canvas.Canvas(buffer)
+
+    # Draw things on the PDF. Here's where the PDF generation happens.
+    # See the ReportLab documentation for the full list of functionality.
+    p.drawString(100, 100, f"Hello world.\n{Corte.Comentario}")
+
+    # Close the PDF object cleanly, and we're done.
+    p.showPage()
+    p.save()
+
+    # FileResponse sets the Content-Disposition header so that browsers
+    # present the option to save the file.
+    return FileResponse(buffer, as_attachment=True, filename=f'hello.pdf')
+
+
+    class HelloPDFView(PDFTemplateView):
+        template_name = 'hello.html'

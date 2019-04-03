@@ -113,4 +113,22 @@ class DelTipoPagoForm(ModelForm):
 		model = TipoPago
 		fields = []
 
+class TransaccionesForm(ModelForm):
+    
+	class Meta:
+		model = Transacciones
+		fields = ['TipoTransaccion','FechaTransaccion','Monto','Descripcion','EstadoActivo',]
 
+
+class DelTransaccionesForm(ModelForm):
+    
+	class Meta:
+		model = Transacciones
+		fields = []
+
+
+class DelCorteForm(ModelForm):
+    
+	class Meta:
+		model = Corte
+		fields = []
