@@ -2,6 +2,7 @@ from django.shortcuts import get_object_or_404, render_to_response, redirect, re
 from django.contrib.auth.decorators import login_required
 from .models import *
 from .forms import *
+from .render import *
 from django.contrib.auth import authenticate, login, logout
 from django.conf import settings
 from datetime import datetime
@@ -9,6 +10,9 @@ import io
 from django.http import FileResponse
 from reportlab.pdfgen import canvas
 from easy_pdf.views import PDFTemplateView
+from django.views.generic import View
+from django.utils import timezone
+
 
 
 
@@ -241,7 +245,7 @@ def list(request,tipo):
 
 
 def listCorte(request):
-    data = Corte.objects.filter(Usuario=request.user)
+    data = Corte.objects.filter(Usuario=request.user).order_by('-id')
     template='finanzas/list_c.html'		
     context = {'username':request,'data':data}
     return render(request, template, context)
@@ -298,12 +302,12 @@ def GeneraCorte(request):
                                  TotalEgresos = DatoCorte['TotalEgresos'],
                                  BalanceCorte = DatoCorte['BalanceCorte'],
                                  Comentario=request.POST['Comentario'])
+            corteCreado = Corte.objects.latest('id')
             for x in DatoCorte['transacciones']:
                 TransaccionesCorte.objects.create(Usuario = request.user,
                                                   Transaccion = Transacciones.objects.get(id=x),
-                                                  corte = Corte.objects.latest('FechaCorte'),
+                                                  corte = corteCreado,
                                                   fecha = datetime.today())
-            print(DatoCorte['transacciones'])
             return HttpResponseRedirect('/miscortes/')
     else:
         form = GeneraCorteForm()
@@ -314,8 +318,7 @@ def GeneraCorte(request):
 
 def listCorteDet(request,id):
     general = Corte.objects.get(Usuario=request.user,id=id)
-    data = TransaccionesCorte.objects.filter(Usuario=request.user,id=id)
-    print(data)
+    data = TransaccionesCorte.objects.filter(Usuario=request.user,corte=id)
     template='finanzas/list_c_det.html'		
 
     context = {'username':request,'data':data,'general':general}
@@ -353,12 +356,12 @@ def createI(request):
 @login_required
 def createR(request):
     if request.method == 'POST':
-        form = RenglonEgresoForm(request.POST, instance=data)
+        form = RenglonEgresoForm(request.POST)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect('/list/r/')
     else:
-        form = RenglonEgresoForm(instance=data)
+        form = RenglonEgresoForm()
 
     context = {'username':request.user,'form':form}
     return render(request, 'finanzas/update.html', context)
@@ -546,6 +549,8 @@ def EditTransaccione(request,id):
     context = {'username':request.user,'form':form}
     return render(request, 'finanzas/add_transacciones.html', context)
 
+
+
 @login_required
 def GenerarPDF(request,tipo,id):
     general = Corte.objects.get(Usuario=request.user,id=id)
@@ -571,3 +576,30 @@ def GenerarPDF(request,tipo,id):
 
     class HelloPDFView(PDFTemplateView):
         template_name = 'hello.html'
+
+
+class Pdf(View):
+    def get(self, request,id):
+        today = timezone.now()
+        general = Corte.objects.get(Usuario=request.user,id=id)
+        data = TransaccionesCorte.objects.filter(Usuario=request.user,corte=id)
+        params = {
+            'today': today,
+            'general': general,
+            'data': data,
+            'request': request
+        }
+        return Render.render('pdf.html', params)
+
+
+def Pdfp(request,id):
+    today = timezone.now()
+    general = Corte.objects.get(Usuario=request.user,id=id)
+    data = TransaccionesCorte.objects.filter(Usuario=request.user,corte=id)
+    context = {
+            'today': today,
+            'general': general,
+            'data': data,
+            'request': request
+        }
+    return render(request, 'pdf.html', context)

@@ -5,13 +5,13 @@
 
 <!-- Begin Page Content -->
 <div class="container-fluid">
-
     <!-- Page Heading -->
     <h1 class="h3 mb-2 text-gray-800">Detalles del Corte</h1>
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
       <div class="card-header py-3">
-        <div><a href="/generar/c/{{general.id}}/" class="btn btn-info" role="button">Generar PDF</a></div>
+        <div><a href="/render/c/{{general.id}}/" class="btn btn-info" role="button">Generar PDF</a><a href="/renderp/c/{{general.id}}/" class="btn btn-info" role="button">Generar HTML</a></div>
+
       </div>
       <div class="card-body">
             <div class="col-md-8">
@@ -91,7 +91,7 @@
 
 {% for data in data %}
               <tr>
-                <td>{{ data.Transaccion.TipoTransaccion }}</td>
+                <td>{% if data.Transaccion.TipoTransaccion == 'I' %}Ingreso{% else %}Gasto{% endif %}</td>
                 <td>{{ data.Transaccion.Descripcion }}</td>
                 <td>{{ data.Transaccion.Monto }}</td>
                 <td>{{ data.Transaccion.FechaTransaccion }}</td>

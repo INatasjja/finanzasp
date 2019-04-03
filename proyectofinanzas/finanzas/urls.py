@@ -31,4 +31,6 @@ urlpatterns = [
     path('add/transacciones', views.AddTransaccione, name='AddTransaccione'),
     path('edit/transacciones/<int:id>/', views.EditTransaccione, name='EditTransaccione'),
     path('generar/<str:tipo>/<int:id>/', views.GenerarPDF, name='GenerarPDF'),
+    path('render/c/<int:id>/', views.Pdf.as_view()),
+    path('renderp/c/<int:id>/', views.Pdfp, name='GenerarPDF'), 
 ]

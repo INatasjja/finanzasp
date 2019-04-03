@@ -110,7 +110,7 @@ class Corte (models.Model):
     
 
     def __str__(self):
-        return self.Mes
+        return '{} {}'.format(self.Mes,self.id)
 
     
 class TransaccionesCorte (models.Model):
